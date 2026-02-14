@@ -82,8 +82,6 @@ export class MainScene {
     );
     heartGeometry.scale(0.075, 0.075, 0.075);
 
-    // tube geometry.
-
     // geometry variation.
     const geoVariation = [
       new THREE.BoxGeometry(0.65, 0.65, 0.65),
