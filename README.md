@@ -1,4 +1,4 @@
-# three-js-basic-sample
+# three-basic-sample
 
 * Three.jsの基本的な使い方についてのサンプル集です。
 
