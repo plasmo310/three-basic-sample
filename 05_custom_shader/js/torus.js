@@ -24,24 +24,28 @@ export class Torus {
       width: 0.075,
       useSoftNormal: true,
     });
-    const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
-    outline.frustumCulled = false;
+    this.outlineMesh = new THREE.Mesh(outlineGeometry, outlineMaterial);
+    this.outlineMesh.frustumCulled = false;
 
     // create mesh.
-    const material = new CustomToonMaterial({
+    const mainMaterial = new CustomToonMaterial({
       color: new THREE.Color(0x0000ff),
     });
-    const mesh = new THREE.Mesh(geometry, material);
+    this.mainMesh = new THREE.Mesh(geometry, mainMaterial);
 
     // add root.
     this.root.clear();
-    this.root.add(outline);
-    this.root.add(mesh);
+    this.root.add(this.outlineMesh);
+    this.root.add(this.mainMesh);
   }
 
   onUpdate(deltaTime) {
     // rotate.
     this.root.rotation.x += 1 * deltaTime;
     this.root.rotation.y += 1 * deltaTime;
+  }
+
+  setVisibleOutline(isVisible) {
+    this.outlineMesh.visible = isVisible;
   }
 }

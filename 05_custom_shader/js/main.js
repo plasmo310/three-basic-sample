@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import WebGL from "three/addons/capabilities/WebGL.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { GlitchPass } from "three/addons/postprocessing/GlitchPass.js";
@@ -12,6 +13,12 @@ import { MainScene } from "./main-scene.js";
  * Main Application
  */
 class MainApp {
+  GUI_PARAM = {
+    useToonOutline: true,
+    usePostFilmGrain: true,
+    usePostGlitch: true,
+  };
+
   constructor(container) {
     // check container.
     if (!container) {
@@ -25,6 +32,18 @@ class MainApp {
       this.container.appendChild(WebGL.getWebGLErrorMessage());
       return;
     }
+
+    // register gui parameters.
+    const gui = new GUI();
+    gui.add(this.GUI_PARAM, "useToonOutline").onChange(() => {
+      this.main_scene.torus.setVisibleOutline(this.GUI_PARAM.useToonOutline);
+    });
+    gui.add(this.GUI_PARAM, "usePostFilmGrain").onChange(() => {
+      this.filmGrainPass.enabled = this.GUI_PARAM.usePostFilmGrain;
+    });
+    gui.add(this.GUI_PARAM, "usePostGlitch").onChange(() => {
+      this.glitchPass.enabled = this.GUI_PARAM.usePostGlitch;
+    });
 
     // create clock.
     this.clock = new THREE.Clock();
@@ -55,8 +74,8 @@ class MainApp {
     });
     this.composer.addPass(this.filmGrainPass);
 
-    const glitchPass = new GlitchPass();
-    this.composer.addPass(glitchPass);
+    this.glitchPass = new GlitchPass();
+    this.composer.addPass(this.glitchPass);
 
     const outputPass = new OutputPass();
     this.composer.addPass(outputPass);
